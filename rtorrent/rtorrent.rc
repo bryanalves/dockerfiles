@@ -1,0 +1,38 @@
+#dht.mode.set = "auto"
+#dht.port.set = 7779
+
+directory.default.set = "/data/rtorrent/torrents"
+
+method.set_key = event.download.finished, make_copy, \
+    "execute = {rsync, -a, --chown=torrent:torrent, \"--chmod=D775,F664\", $d.get_base_path=, \"$cat=/data/download/,$d.get_custom1=,/\"}"
+
+method.set_key = event.download.erased, delete_torrent_data, \
+    "execute = {rm, -rf, $d.base_path=}"
+
+network.port_range.set = 7778-7778
+network.scgi.open_port = "0.0.0.0:5000"
+
+protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
+protocol.pex.set = "yes"
+
+schedule2 = watch_unsorted, 0, 10, \
+    "load_start=/data/torrentwatch/unsorted/*.torrent, d.custom1.set=unsorted"
+
+schedule2 = watch_tv, 0, 10, \
+    "load_start=/data/torrentwatch/tv/*.torrent, d.custom1.set=tv"
+
+schedule2 = watch_movies, 0, 10, \
+    "load_start=/data/torrentwatch/movies/*.torrent, d.custom1.set=movies"
+
+schedule2 = watch_music, 0, 10, \
+    "load_start=/data/torrentwatch/music/*.torrent, d.custom1.set=music"
+
+schedule2 = untied_directory, 0, 10, remove_untied=
+
+session.path.set = "/data/rtorrent/session"
+
+throttle.min_peers.normal.set = 125
+throttle.max_peers.normal.set = 300
+
+throttle.min_peers.seed.set = 125
+throttle.max_peers.seed.set = 300
