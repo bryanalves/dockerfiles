@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.2
 
 ADD rtorrent.rc /app/
 ADD entrypoint.sh /app/

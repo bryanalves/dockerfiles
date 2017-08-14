@@ -1,7 +1,13 @@
-#dht.mode.set = "auto"
-#dht.port.set = 7779
+dht.mode.set = "auto"
+dht.port.set = 7779
+peer_exchange = yes
+
+ip = big.bumbum.dance
 
 directory.default.set = "/data/rtorrent/torrents"
+session = /data/rtorrent/session
+
+encryption = allow_incoming,try_outgoing,enable_retry
 
 method.set_key = event.download.finished, make_copy, \
     "execute = {rsync, -a, --chown=torrent:torrent, \"--chmod=D775,F664\", $d.get_base_path=, \"$cat=/data/download/,$d.get_custom1=,/\"}"
