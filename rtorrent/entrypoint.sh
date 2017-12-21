@@ -1,6 +1,6 @@
 #!/bin/sh
 
-addgroup -g $(stat -c %g /data/download) torrent && adduser -h /app -s /bin/sh -G torrent -D -u $(stat -c %u /data/download) torrent
+addgroup --gid $(stat -c %g /data/download) torrent && useradd --home-dir /app --shell /usr/sbin/nologin --gid torrent --uid $(stat -c %u /data/download) torrent
 
 mkdir -p /data/rtorrent/session
 mkdir -p /data/rtorrent/torrents

@@ -1,4 +1,4 @@
-FROM alpine:3.2
+FROM debian:stretch
 
 ADD rtorrent.rc /app/
 ADD entrypoint.sh /app/
@@ -6,7 +6,9 @@ ADD entrypoint.sh /app/
 ENV TERM=xterm
 
 RUN mkdir -p /app /data && \
-    apk add --update ca-certificates rtorrent rsync && \
+    apt-get update && \
+    apt-get install -y ca-certificates rtorrent rsync && \
+    rm -rf /var/lib/apt/lists/* && \
     chmod +x /app/entrypoint.sh
 
 EXPOSE 5000
