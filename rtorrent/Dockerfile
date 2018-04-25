@@ -12,10 +12,10 @@ RUN mkdir -p /app /data && \
     chmod +x /app/entrypoint.sh
 
 EXPOSE 5000
-EXPOSE 7778
-EXPOSE 7779
+EXPOSE 57778
+EXPOSE 57779
 
-VOLUME ["/data/rtorrent", "/data/download", "/data/torrentwatch"]
+VOLUME ["/data/rtorrent"]
 
 WORKDIR /app
 

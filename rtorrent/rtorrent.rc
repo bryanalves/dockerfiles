@@ -2,74 +2,16 @@ dht.mode.set = "auto"
 dht.port.set = 57779
 peer_exchange = yes
 
+use_udp_trackers = yes
+
 directory.default.set = "/data/rtorrent/torrents"
 
-encryption = allow_incoming,try_outgoing,enable_retry
-
-method.set_key = event.download.finished, make_copy, \
-    "execute.nothrow.bg = {rsync, -a, --chown=torrent:torrent, --delay-updates, \"--chmod=D775,F664\", $d.get_base_path=, \"$cat=/data/download/,$d.get_custom1=,/\"}"
-
-method.set_key = event.download.erased, delete_torrent_data, \
-    "execute = {rm, -rf, $d.base_path=}"
-
-network.http.max_open.set = 99
-network.max_open_files.set = 900
-network.max_open_sockets.set = 999
 network.port_range.set = 57778-57778
 network.scgi.open_port = "0.0.0.0:5000"
-network.xmlrpc.size_limit.set = 2M
 
 protocol.encryption.set = allow_incoming,try_outgoing,enable_retry
 protocol.pex.set = "yes"
 
-schedule2 = watch_unsorted, 0, 10, \
-    "load_start=/data/torrentwatch/unsorted/*.torrent, d.custom1.set=unsorted"
-
-schedule2 = watch_tv, 0, 10, \
-    "load_start=/data/torrentwatch/tv/*.torrent, d.custom1.set=tv"
-
-schedule2 = watch_movies, 0, 10, \
-    "load_start=/data/torrentwatch/movies/*.torrent, d.custom1.set=movies"
-
-schedule2 = watch_music, 0, 10, \
-    "load_start=/data/torrentwatch/music/*.torrent, d.custom1.set=music"
-
-schedule2 = untied_directory, 0, 10, remove_untied=
-
 session.path.set = "/data/rtorrent/session"
 
-throttle.max_downloads.global.set = 300
-throttle.max_uploads.global.set   = 1000
-
-throttle.max_downloads.set = 50
-throttle.max_uploads.set = 200
-
-throttle.min_peers.normal.set = 100
-throttle.max_peers.normal.set = 1200
-
-throttle.min_peers.seed.set = 100
-throttle.max_peers.seed.set = 1200
-
-trackers.numwant.set = 100
-
-use_udp_trackers = yes
-
-log.open_file = "rtorrent.log", (cat,/tmp/rtorrent.log.,(system.pid))
-
-log.open_file = "connection.log", (cat,/tmp/rtorrent_connection.log.,(system.pid))
-log.open_file = "dht.log", (cat,/tmp/rtorrent_dht.log.,(system.pid))
-log.open_file = "peer.log", (cat,/tmp/rtorrent_peer.log.,(system.pid))
-log.open_file = "storage.log", (cat,/tmp/rtorrent_storage.log.,(system.pid))
-log.open_file = "thread.log", (cat,/tmp/rtorrent_thread.log.,(system.pid))
-log.open_file = "tracker.log", (cat,/tmp/rtorrent_tracker.log.,(system.pid))
-log.open_file = "torrent.log", (cat,/tmp/rtorrent_torrent.log.,(system.pid))
-
-log.add_output = "info", "rtorrent.log"
-
-log.add_output = "connection_debug", "connection.log"
-log.add_output = "dht_debug", "dht.log"
-log.add_output = "peer_debug", "peer.log"
-log.add_output = "storage_debug", "storage.log"
-log.add_output = "thread_debug", "thread.log"
-log.add_output = "tracker_debug", "tracker.log"
-log.add_output = "torrent_debug", "torrent.log"
+try_import=/app/rtorrent_extra.rc
