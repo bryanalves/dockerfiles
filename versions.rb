@@ -18,13 +18,26 @@ class Versions
     @name = name
   end
 
-  def build
-    Dir.chdir(name) do
-      logger.info "Building #{name}"
-      image_obj = Docker::Image.build_from_dir(Dir.pwd)
-      image_obj.tag(repo: name, tag: tag)
+  module Actions
+    def build
+      Dir.chdir(name) do
+        logger.info "Building #{name}"
+        image_obj = Docker::Image.build_from_dir(Dir.pwd)
+        image_obj.tag(repo: name, tag: tag)
+      end
+    end
+
+    def push
+      Versions.require_repo
+
+      logger.info "Pushing #{name}"
+      image_obj = Docker::Image.get(name_with_tag)
+      image_obj.tag(repo: "#{repo}/#{name}", tag: tag)
+      image_obj.push(nil, repo_tag: full_name)
     end
   end
+
+  include Actions
 
   def in_repo?
     Versions.require_repo
@@ -39,15 +52,6 @@ class Versions
   def full_name
     Versions.require_repo
     "#{repo}/#{name_with_tag}"
-  end
-
-  def push
-    Versions.require_repo
-
-    logger.info "Pushing #{name}"
-    image_obj = Docker::Image.get(name_with_tag)
-    image_obj.tag(repo: "#{repo}/#{name}", tag: tag)
-    image_obj.push(nil, repo_tag: full_name)
   end
 
   def name_with_tag
