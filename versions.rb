@@ -15,6 +15,17 @@ module Versions
       end
     end
 
+    def present?(name)
+      require_repo
+      image_name = Versions.full_image(name)
+      begin
+        Docker::Image.get(image_name)
+        true
+      rescue Docker::Error::NotFoundError
+        false
+      end
+    end
+
     def push(name)
       require_repo
       logger.info "Pushing #{name}"

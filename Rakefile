@@ -30,13 +30,11 @@ images.each do |image|
   task "deploy:#{image}" => [image, "push:#{image}"]
 
   task "check:#{image}" do
-    Versions.require_repo
-    image_name = Versions.full_image(image)
-    begin
-      Docker::Image.get(image_name)
-      logger.info "#{image_name} present"
-    rescue Docker::Error::NotFoundError
-      logger.info "#{image_name} not present"
+    present = Versions.present?(image)
+    if present
+      logger.info "#{Versions.full_image(image)} present"
+    else
+      logger.info "#{Versions.full_image(image)} not present"
     end
   end
 end
