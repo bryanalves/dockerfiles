@@ -5,6 +5,7 @@ module Versions
 
   class << self
     attr_accessor :repo
+    attr_accessor :logger
 
     def tag(name)
       TAG[name] || 'latest'

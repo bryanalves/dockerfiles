@@ -3,9 +3,11 @@ require 'docker'
 
 images = Rake::FileList['**/Dockerfile'].map { |file| File.dirname file }
 
-Versions.repo = ENV['DOCKER_REPO']
 logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
+
+Versions.repo = ENV['DOCKER_REPO']
+Versions.logger = logger
 
 images.each do |image|
   task "test:#{image}" => "build:#{image}" do
