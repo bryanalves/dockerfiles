@@ -4,7 +4,7 @@ require_relative '../versions'
 
 def setup_image
   before(:all) do
-    image = Docker::Image.get(Versions.full_image(self.class.description))
+    image = Docker::Image.get(Versions.image(self.class.description))
 
     set :backend, :docker
     set :docker_image, image.id

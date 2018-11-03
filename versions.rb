@@ -9,12 +9,11 @@ module Versions
     end
 
     def image(name)
-      name = "#{ENV['DOCKER_REPO']}/#{name}" unless ENV['DOCKER_REPO'].to_s.empty?
-      name
+      "#{name}:#{tag(name)}"
     end
 
-    def full_image(name)
-      "#{image(name)}:#{tag(name)}"
+    def full_image(repo, name)
+      "#{repo}/#{image(name)}"
     end
   end
 end
