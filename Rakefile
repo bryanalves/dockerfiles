@@ -14,15 +14,15 @@ images.each do |image|
 
   task "build:#{image}" do
     Dir.chdir(image) do
-      puts "\n\nBuilding #{image}"
+      puts "Building #{image}"
       image_obj = Docker::Image.build_from_dir(Dir.pwd)
       image_obj.tag(repo: image, tag: Versions.tag(image))
-      puts "\n\n"
     end
   end
 
   task "push:#{image}" do
     raise 'Specify repo via DOCKER_REPO environment variable' unless ENV['DOCKER_REPO']
+    puts "Pushing #{image}"
     image_obj = Docker::Image.get(Versions.image(image))
     image_obj.tag(repo: "#{ENV['DOCKER_REPO']}/#{image}", tag: Versions.tag(image))
     image_obj.push(nil, repo_tag: Versions.full_image(ENV['DOCKER_REPO'], image))
