@@ -30,6 +30,17 @@ images.each do |image|
 
   task image => ["build:#{image}", "test:#{image}"]
   task "deploy:#{image}" => [image, "push:#{image}"]
+
+  task "check:#{image}" do
+    raise 'Specify repo via DOCKER_REPO environment variable' unless ENV['DOCKER_REPO']
+    image_name = Versions.full_image(ENV['DOCKER_REPO'], image)
+    begin
+      Docker::Image.get(image_name)
+      puts "#{image_name} present"
+    rescue Docker::Error::NotFoundError
+      puts "#{image_name} not present"
+    end
+  end
 end
 
 task build: images.map { |image| "build:#{image}" }
