@@ -8,7 +8,7 @@ dockerdirs.each do |dir|
     if !Dir.exist?("spec/#{dir}")
       puts "Skipping non-existent tests for #{dir}"
     else
-      sh "rspec spec/#{dir}"
+      sh "rspec --format documentation spec/#{dir}"
     end
   end
 
