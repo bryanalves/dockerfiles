@@ -1,4 +1,4 @@
-class Versions
+class Maker
   TAG = {
     'rtorrent' => '0.1'
   }.freeze
@@ -28,7 +28,7 @@ class Versions
     end
 
     def push
-      Versions.require_repo
+      Maker.require_repo
 
       logger.info "Pushing #{name}"
       image_obj = Docker::Image.get(name_with_tag)
@@ -40,7 +40,7 @@ class Versions
   include Actions
 
   def in_repo?
-    Versions.require_repo
+    Maker.require_repo
     begin
       Docker::Image.get(full_name)
       true
@@ -50,7 +50,7 @@ class Versions
   end
 
   def full_name
-    Versions.require_repo
+    Maker.require_repo
     "#{repo}/#{name_with_tag}"
   end
 
@@ -61,14 +61,14 @@ class Versions
   private
 
   def tag
-    Versions::TAG[name] || 'latest'
+    Maker::TAG[name] || 'latest'
   end
 
   def logger
-    Versions.logger
+    Maker.logger
   end
 
   def repo
-    Versions.repo
+    Maker.repo
   end
 end

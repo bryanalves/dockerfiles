@@ -1,4 +1,4 @@
-require_relative 'versions'
+require_relative 'maker'
 require 'docker'
 
 images = Rake::FileList['**/Dockerfile'].map { |file| File.dirname file }
@@ -6,8 +6,8 @@ images = Rake::FileList['**/Dockerfile'].map { |file| File.dirname file }
 logger = Logger.new(STDOUT)
 logger.level = Logger::INFO
 
-Versions.repo = ENV['DOCKER_REPO']
-Versions.logger = logger
+Maker.repo = ENV['DOCKER_REPO']
+Maker.logger = logger
 
 images.each do |image|
   task "test:#{image}" => "build:#{image}" do
@@ -19,22 +19,22 @@ images.each do |image|
   end
 
   task "build:#{image}" do
-    Versions.new(image).build
+    Maker.new(image).build
   end
 
   task "push:#{image}" do
-    Versions.new(image).push
+    Maker.new(image).push
   end
 
   task image => ["build:#{image}", "test:#{image}"]
   task "deploy:#{image}" => [image, "push:#{image}"]
 
   task "check:#{image}" do
-    present = Versions.new(image).in_repo?
+    present = Maker.new(image).in_repo?
     if present
-      logger.info "#{Versions.new(image).full_name} present"
+      logger.info "#{Maker.new(image).full_name} present"
     else
-      logger.info "#{Versions.new(image).full_name} not present"
+      logger.info "#{Maker.new(image).full_name} not present"
     end
   end
 end
