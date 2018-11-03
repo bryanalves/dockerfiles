@@ -23,11 +23,7 @@ images.each do |image|
   end
 
   task "push:#{image}" do
-    Versions.require_repo
-    logger.info "Pushing #{image}"
-    image_obj = Docker::Image.get(Versions.image(image))
-    image_obj.tag(repo: "#{ENV['DOCKER_REPO']}/#{image}", tag: Versions.tag(image))
-    image_obj.push(nil, repo_tag: Versions.full_image(image))
+    Versions.push(image)
   end
 
   task image => ["build:#{image}", "test:#{image}"]

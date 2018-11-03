@@ -15,6 +15,14 @@ module Versions
       end
     end
 
+    def push(name)
+      require_repo
+      logger.info "Pushing #{name}"
+      image_obj = Docker::Image.get(Versions.image(name))
+      image_obj.tag(repo: "#{repo}/#{name}", tag: Versions.tag(name))
+      image_obj.push(nil, repo_tag: Versions.full_image(name))
+    end
+
     def tag(name)
       TAG[name] || 'latest'
     end
@@ -29,7 +37,7 @@ module Versions
     end
 
     def require_repo
-      raise 'Specify repo via DOCKER_REPO environment variable' unless repo.present?
+      raise 'Specify repo via DOCKER_REPO environment variable' if repo.to_s.empty?
     end
   end
 end
