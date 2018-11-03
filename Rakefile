@@ -4,11 +4,13 @@ require 'docker'
 images = Rake::FileList['**/Dockerfile'].map { |file| File.dirname file }
 
 Versions.repo = ENV['DOCKER_REPO']
+logger = Logger.new(STDOUT)
+logger.level = Logger::INFO
 
 images.each do |image|
   task "test:#{image}" => "build:#{image}" do
     if !Dir.exist?("spec/#{image}")
-      puts "Skipping non-existent tests for #{image}"
+      logger.warn "Skipping non-existent tests for #{image}"
     else
       sh "rspec --format documentation spec/#{image}"
     end
@@ -16,7 +18,7 @@ images.each do |image|
 
   task "build:#{image}" do
     Dir.chdir(image) do
-      puts "Building #{image}"
+      logger.info "Building #{image}"
       image_obj = Docker::Image.build_from_dir(Dir.pwd)
       image_obj.tag(repo: image, tag: Versions.tag(image))
     end
@@ -24,7 +26,7 @@ images.each do |image|
 
   task "push:#{image}" do
     Versions.require_repo
-    puts "Pushing #{image}"
+    logger.info "Pushing #{image}"
     image_obj = Docker::Image.get(Versions.image(image))
     image_obj.tag(repo: "#{ENV['DOCKER_REPO']}/#{image}", tag: Versions.tag(image))
     image_obj.push(nil, repo_tag: Versions.full_image(image))
@@ -38,9 +40,9 @@ images.each do |image|
     image_name = Versions.full_image(image)
     begin
       Docker::Image.get(image_name)
-      puts "#{image_name} present"
+      logger.info "#{image_name} present"
     rescue Docker::Error::NotFoundError
-      puts "#{image_name} not present"
+      logger.info "#{image_name} not present"
     end
   end
 end
