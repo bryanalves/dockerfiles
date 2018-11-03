@@ -5,7 +5,7 @@ module Versions
 
   class << self
     def tag(name)
-      TAG[name]
+      TAG[name] || 'latest'
     end
 
     def image(name)
