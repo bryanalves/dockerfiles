@@ -19,11 +19,7 @@ images.each do |image|
   end
 
   task "build:#{image}" do
-    Dir.chdir(image) do
-      logger.info "Building #{image}"
-      image_obj = Docker::Image.build_from_dir(Dir.pwd)
-      image_obj.tag(repo: image, tag: Versions.tag(image))
-    end
+    Versions.build(image)
   end
 
   task "push:#{image}" do

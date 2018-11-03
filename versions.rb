@@ -7,6 +7,14 @@ module Versions
     attr_accessor :repo
     attr_accessor :logger
 
+    def build(name)
+      Dir.chdir(name) do
+        logger.info "Building #{name}"
+        image_obj = Docker::Image.build_from_dir(Dir.pwd)
+        image_obj.tag(repo: name, tag: Versions.tag(name))
+      end
+    end
+
     def tag(name)
       TAG[name] || 'latest'
     end
