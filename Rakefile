@@ -19,22 +19,22 @@ images.each do |image|
   end
 
   task "build:#{image}" do
-    Versions.build(image)
+    Versions.new(image).build
   end
 
   task "push:#{image}" do
-    Versions.push(image)
+    Versions.new(image).push
   end
 
   task image => ["build:#{image}", "test:#{image}"]
   task "deploy:#{image}" => [image, "push:#{image}"]
 
   task "check:#{image}" do
-    present = Versions.present?(image)
+    present = Versions.new(image).in_repo?
     if present
-      logger.info "#{Versions.full_image(image)} present"
+      logger.info "#{Versions.new(image).full_name} present"
     else
-      logger.info "#{Versions.full_image(image)} not present"
+      logger.info "#{Versions.new(image).full_name} not present"
     end
   end
 end
