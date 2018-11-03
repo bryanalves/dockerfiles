@@ -4,6 +4,8 @@ module Versions
   }.freeze
 
   class << self
+    attr_accessor :repo
+
     def tag(name)
       TAG[name] || 'latest'
     end
@@ -12,8 +14,13 @@ module Versions
       "#{name}:#{tag(name)}"
     end
 
-    def full_image(repo, name)
+    def full_image(name)
+      require_repo
       "#{repo}/#{image(name)}"
+    end
+
+    def require_repo
+      raise 'Specify repo via DOCKER_REPO environment variable' unless repo.present?
     end
   end
 end

@@ -3,6 +3,8 @@ require 'docker'
 
 images = Rake::FileList['**/Dockerfile'].map { |file| File.dirname file }
 
+Versions.repo = ENV['DOCKER_REPO']
+
 images.each do |image|
   task "test:#{image}" => "build:#{image}" do
     if !Dir.exist?("spec/#{image}")
@@ -21,19 +23,19 @@ images.each do |image|
   end
 
   task "push:#{image}" do
-    raise 'Specify repo via DOCKER_REPO environment variable' unless ENV['DOCKER_REPO']
+    Versions.require_repo
     puts "Pushing #{image}"
     image_obj = Docker::Image.get(Versions.image(image))
     image_obj.tag(repo: "#{ENV['DOCKER_REPO']}/#{image}", tag: Versions.tag(image))
-    image_obj.push(nil, repo_tag: Versions.full_image(ENV['DOCKER_REPO'], image))
+    image_obj.push(nil, repo_tag: Versions.full_image(image))
   end
 
   task image => ["build:#{image}", "test:#{image}"]
   task "deploy:#{image}" => [image, "push:#{image}"]
 
   task "check:#{image}" do
-    raise 'Specify repo via DOCKER_REPO environment variable' unless ENV['DOCKER_REPO']
-    image_name = Versions.full_image(ENV['DOCKER_REPO'], image)
+    Versions.require_repo
+    image_name = Versions.full_image(image)
     begin
       Docker::Image.get(image_name)
       puts "#{image_name} present"
