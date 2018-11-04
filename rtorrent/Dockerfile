@@ -1,5 +1,9 @@
 FROM debian:stretch
 
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 ADD rtorrent.rc /app/
 ADD entrypoint.sh /app/
 
@@ -19,6 +23,6 @@ VOLUME ["/data/rtorrent"]
 
 WORKDIR /app
 
-ENTRYPOINT ["/app/entrypoint.sh"]
+ENTRYPOINT ["/tini", "--", "/app/entrypoint.sh"]
 
 CMD ["rtorrent", "-n", "-o", "import=/app/rtorrent.rc"]
