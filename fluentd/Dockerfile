@@ -7,6 +7,7 @@ RUN apk add --update --virtual .build-deps \
         fluent-plugin-secure-forward \
         fluent-plugin-prometheus \
         fluent-plugin-rewrite-tag-filter \
+        fluent-plugin-route \
         fluent-plugin-elasticsearch \
  && sudo gem sources --clear-all \
  && apk del .build-deps \
