@@ -6,6 +6,7 @@ RUN apk add --update --virtual .build-deps \
  && sudo gem install \
         fluent-plugin-secure-forward \
         fluent-plugin-prometheus \
+        fluent-plugin-retag \
         fluent-plugin-rewrite-tag-filter \
         fluent-plugin-route \
         fluent-plugin-elasticsearch \
