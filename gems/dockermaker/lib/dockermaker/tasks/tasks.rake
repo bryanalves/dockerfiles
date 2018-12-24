@@ -27,7 +27,7 @@ Dockermaker.tasks.each do |taskname, meta|
 
       if %w[1 true].include? ENV['FORCE_PUSH']
         Dockermaker.logger.warn "Force pushing #{maker.full_name(repo)}"
-        maker.push
+        maker.push(repo)
       else
         Dockermaker.logger.info "Skipping #{maker.full_name(repo)}, already exists"
       end
