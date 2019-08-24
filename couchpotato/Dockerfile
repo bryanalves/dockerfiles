@@ -1,4 +1,5 @@
 FROM alpine:3.5
+LABEL version 0.1
 
 MAINTAINER Bryan Alves <bryanalves@gmail.com>
 

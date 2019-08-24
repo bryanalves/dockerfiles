@@ -1,4 +1,6 @@
 FROM fluent/fluentd:v1.2-onbuild
+LABEL version 0.1
+
 MAINTAINER Bryan Alves <bryanalves@gmail.com>
 
 RUN apk add --update --virtual .build-deps \
