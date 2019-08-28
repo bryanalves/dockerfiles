@@ -1,0 +1,39 @@
+---
+registries:
+  bumbum:
+    uri: 'docker://registry.my.bumbum.dance'
+  dockerhub:
+    uri: 'docker://registry.hub.docker.com/bryanalves'
+
+default_registries:
+  dev: bumbum
+  stage: bumbum
+  prod: bumbum
+  public: dockerhub
+
+builds:
+  couchpotato:
+    version: '0.2'
+    public_enabled: true
+
+  flood:
+
+  fluentd:
+    version: '0.5'
+    public_enabled: true
+
+  rtorrent:
+    version: '0.1'
+    public_enabled: true
+
+  sickchill:
+    version: '0.1'
+    public_enabled: true
+
+  sickrage:
+    version: '0.1'
+    public_enabled: true
+
+  smart_exporter:
+    version: '0.2'
+    public_enabled: true
