@@ -19,7 +19,8 @@ EXPOSE 5000
 EXPOSE 57778
 EXPOSE 57779
 
-VOLUME ["/data/rtorrent"]
+VOLUME ["/data"]
+VOLUME ["/app/config"]
 
 WORKDIR /app
 

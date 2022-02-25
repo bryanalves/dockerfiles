@@ -1,10 +1,10 @@
 #!/bin/sh
 
-addgroup --gid $(stat -c %g /data/download) torrent && useradd --home-dir /app --shell /usr/sbin/nologin --gid torrent --uid $(stat -c %u /data/download) torrent
+addgroup --gid $(stat -c %g /data) torrent && useradd --home-dir /app --shell /usr/sbin/nologin --gid torrent --uid $(stat -c %u /data) torrent
 
-mkdir -p /data/rtorrent/session
-mkdir -p /data/rtorrent/torrents
+mkdir -p /app/config/session
+mkdir -p /app/config/torrents
 
-rm -f /data/rtorrent/session/rtorrent.lock
+rm -f /app/config/session/rtorrent.lock
 
 exec "$@"
